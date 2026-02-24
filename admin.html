@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin - Embarca</title>
+<style>
+body{font-family:Arial;max-width:800px;margin:40px auto}
+h3{margin-top:30px}
+input{width:100%;padding:12px;margin-bottom:10px}
+button{width:100%;padding:14px;background:#000;color:#fff;border:none;cursor:pointer;margin-top:20px}
+</style>
+</head>
+<body>
+
+<h2>Gerador de Carga</h2>
+
+<h3>Dados da Carga</h3>
+<input id="nome" placeholder="Nome da carga">
+<input id="id" placeholder="ID da carga">
+<input id="origem" placeholder="Origem">
+<input id="destino" placeholder="Destino">
+<input id="peso" placeholder="Peso">
+<input id="veiculo" placeholder="Veículo">
+<input id="carroceria" placeholder="Carroceria">
+<input id="valor" placeholder="Valor">
+
+<h3>Dados do Agenciador</h3>
+<input id="ag_nome" placeholder="Nome do Agenciador">
+<input id="ag_cpf" placeholder="CPF do Agenciador">
+<input id="ag_cnpj" placeholder="CNPJ do Agenciador">
+<input id="ag_razao" placeholder="Razão Social">
+<input id="ag_local" placeholder="Localidade">
+
+<button onclick="gerar()">GERAR E BAIXAR HTML</button>
+
+<script>
+async function gerar(){
+
+const response = await fetch("template.html");
+let template = await response.text();
+
+template = template
+.replace(/__NOME__/g, nome.value)
+.replace(/__ID__/g, id.value)
+.replace(/__ORIGEM__/g, origem.value)
+.replace(/__DESTINO__/g, destino.value)
+.replace(/__PESO__/g, peso.value)
+.replace(/__VEICULO__/g, veiculo.value)
+.replace(/__CARROCERIA__/g, carroceria.value)
+.replace(/__VALOR__/g, valor.value)
+.replace(/__AG_NOME__/g, ag_nome.value)
+.replace(/__AG_CPF__/g, ag_cpf.value)
+.replace(/__AG_CNPJ__/g, ag_cnpj.value)
+.replace(/__AG_RAZAO__/g, ag_razao.value)
+.replace(/__AG_LOCAL__/g, ag_local.value);
+
+const blob = new Blob([template], { type: "text/html" });
+const link = document.createElement("a");
+
+let nomeArquivo = origem.value.toLowerCase().replace(/\s/g,'-') + "-" +
+                  destino.value.toLowerCase().replace(/\s/g,'-') + ".html";
+
+link.href = URL.createObjectURL(blob);
+link.download = nomeArquivo;
+link.click();
+}
+</script>
+
+</body>
+</html>
